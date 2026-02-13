@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Automação de Rotas",
+  "version": "1.0",
+  "description": "Preenche formulários automaticamente",
+  "permissions": ["scripting", "activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://site-com-formulario.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

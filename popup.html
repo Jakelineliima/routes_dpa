@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+    rel="stylesheet">
+    <!-- css -->
+  <link rel="stylesheet" href="style.css">
+  <!-- flavicon -->
+   <link rel="icon" href="./favicon.png" type="image/png">
+
+  <title>Preenchimento de Rotas</title>
+
+</head>
+
+<body>
+
+  <div class="container_divs">
+    <div class="container">
+      <div class="header">
+        <h1>
+          <span>✈️</span>
+          Automação de Rotas
+          <span>✈️</span>
+        </h1>
+        <p>Preencha formulários automaticamente</p>
+      </div>
+
+      <div class="form-group">
+        <label for="dados">📋 Cole suas rotas aqui:</label>
+        <textarea id="dados" placeholder="Exemplo:
+GRU CGH
+SAO RIO
+BSB POA
+
+Separe origem e destino por espaço ou tab"></textarea>
+      </div>
+
+      <div class="stats" >
+        <div class="stat-card">
+          <div class="number" id="total-rotas">0</div>
+          <div class="label">Rotas</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="rotas-validas">0</div>
+          <div class="label">Válidas</div>
+        </div>
+      </div>
+
+      <button id="btnExecutar">
+
+        <span id="btn-text">Executar Automação</span>
+
+      </button>
+      <button id="btnParar"><span id="btn-text">Parar Automação</span></button>
+    </div>
+
+
+    <div class="instrucoes">
+      <strong>Como usar:</strong>
+      <ul>
+        <li>Cole os pares origem/destino (um por linha)</li>
+        <li>Separe por espaço (ex: GRU CGH)</li>
+        <li>Clique em "Executar Automação"</li>
+        <li>Aguarde o processamento automático e o relatório de conclusão.</li>
+      </ul>
+      <br>
+      <strong>  Formato dos dados:</strong>
+      <p>Pode ser inserido dados da seguinte forma:</p>
+      <ul>
+        <li>Origem/Destino - ex: GRU CGH</li>
+        <li>Origem/Destino - ex: Buenos Aires (AEP)   Belo Horizonte (CNF)</li>
+      </ul>
+
+    </div>
+  </div>
+
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

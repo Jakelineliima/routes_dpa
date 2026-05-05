@@ -1,0 +1,108 @@
+<style>
+@media screen and (min-width:768px) {
+    #kv-content h2{
+    max-width: 49% !important;
+}
+}
+
+
+
+.cnt_gol-match-selector {
+  max-width: 1200px;
+}
+.cnt_gol-match-selector__title {
+  font-size: 1.5rem;
+  color: #222222;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+.cnt_gol-match-selector__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.cnt_gol-match-selector .btn {
+  width: 170.5px;
+  height: 70px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #FF7020;
+  color: #ffffff;
+  border: none !important;
+  border-radius: 8px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+
+}
+.cnt_gol-match-selector .btn:hover {
+  background-color: rgb(96.0806451613, 33.4193548387, 58.4838709677);
+ text-decoration: none !important;
+}
+.cnt_gol-match-selector .btn:active {
+  transform: scale(0.99);
+}
+.cnt_gol-match-selector .btn a {
+  text-decoration: none!important;
+}
+@media (max-width: 600px) {
+  .cnt_gol-legend-selector__buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px !important;
+    width: 90%;
+  }
+
+.cnt_gol-legend-container {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+@media (max-width: 600px) {
+  .cnt_gol-legend-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 90%;
+  }
+}
+.cnt_gol-legend-container .cnt_gol-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cnt_gol-legend-container .cnt_gol-legend-item .cnt_gol-legend-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.cnt_gol-legend-container .cnt_gol-legend-item .cnt_gol-legend-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 18px;
+  max-width: 180px;
+}
+
+ds-accordion-nav{
+--ds-nav-primary: #ff7020; --ds-nav-card-bg: #ff7020; --ds-nav-card-hover: #ff7020; --ds-nav-card-active: #ff7020;
+}
+.nav-btn{
+    background: none !important;
+    color: #000 !important;
+    border-radius: 25px !important;
+    padding: 10px 20px !important;
+    border: 1px solid #000 !important;
+}
+</style>
+<script src="https://staticcrm.blob.core.windows.net/voegol/canta/cdn/web-components/ds-engine-mapa.bundle.min.js"></script>
+<script src="https://staticcrm.blob.core.windows.net/voegol/canta/cdn/web-components/ds-accordion-nav.bundle.min-v3.js"></script>
+<script src="https://staticcrm.blob.core.windows.net/voegol/canta/cdn/web-components/flights-offers-accordion-progressive-v3.min.js"></script>

@@ -10,10 +10,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
     rel="stylesheet">
-    <!-- css -->
+  <!-- css -->
   <link rel="stylesheet" href="style.css">
   <!-- flavicon -->
-   <link rel="icon" href="./favicon.png" type="image/png">
+  <link rel="icon" href="./favicon.png" type="image/png">
 
   <title>Preenchimento de Rotas</title>
 
@@ -42,16 +42,29 @@ BSB POA
 Separe origem e destino por espaço ou tab"></textarea>
       </div>
 
-      <div class="stats" >
+
+
+
+
+      <div class="stats" id="json-preview">
         <div class="stat-card">
-          <div class="number" id="total-rotas">0</div>
+          <div class="number">⚠️ </div>
           <div class="label">Rotas</div>
         </div>
         <div class="stat-card">
-          <div class="number" id="rotas-validas">0</div>
+          <div class="number" id="relatorio">0</div>
           <div class="label">Válidas</div>
         </div>
+        <div class="stat-card" id="aviso-limite" style="display:none;">
+          <span id="aviso-icone" class="number">⚠️</span>
+          <br>
+          <span class="label" id="aviso-texto"></span>
+          
+        </div>
       </div>
+
+
+
 
       <button id="btnExecutar">
 
@@ -61,7 +74,8 @@ Separe origem e destino por espaço ou tab"></textarea>
       <button id="btnParar"><span id="btn-text">Parar Automação</span></button>
     </div>
 
-
+    <div id="relatorio"></div>
+    <!-- 
     <div class="instrucoes">
       <strong>Como usar:</strong>
       <ul>
@@ -77,8 +91,10 @@ Separe origem e destino por espaço ou tab"></textarea>
         <li>Origem/Destino - ex: GRU CGH</li>
         <li>Origem/Destino - ex: Buenos Aires (AEP)   Belo Horizonte (CNF)</li>
       </ul>
+    </div> 
+-->
 
-    </div>
+    <div id="previewRelatorio"></div>
   </div>
 
 

@@ -1,1 +1,2 @@
 console.log("Extensão carregada na página!");
+

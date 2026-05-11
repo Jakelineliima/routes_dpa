@@ -247,8 +247,14 @@
       display: none;
     }
 
+    .separador {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #e0e0e0;
+    }
+
     /* Relatorio */
-   
+
     .header_relatorio {
       text-align: center;
       margin-bottom: 20px;
@@ -272,7 +278,7 @@
     }
 
 
-      #relatorio {
+    #relatorio {
       width: 350px;
       height: 340px;
       padding: 12px;
@@ -281,7 +287,7 @@
       border-radius: 6px;
       font-size: 14px;
       color: #555;
-  
+
     }
 
     #relatorio p {
@@ -314,6 +320,34 @@
       font-weight: bold;
     }
 
+    #json-output {
+      width: 278px;
+      border-style: none;
+      border-radius: 22px;
+      padding: 11px;
+
+    }
+
+    #json-section div {
+      width: 278px;
+    }
+
+    #json-section div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 17px 0px;
+    }
+
+    #btnCopiarJSON {
+      border: none #4caf50;
+      border-radius: 9px;
+      height: 28px;
+      width: 71px;
+      background: #4caf50;
+      cursor: pointer;
+      font-size: 12px;
+    }
 
     /* Animação de loading */
     @keyframes spin {

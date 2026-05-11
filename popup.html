@@ -4,23 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
     rel="stylesheet">
-    <!-- css -->
   <link rel="stylesheet" href="style.css">
-  <!-- flavicon -->
-   <link rel="icon" href="./favicon.png" type="image/png">
-
+  <link rel="icon" href="./favicon.png" type="image/png">
   <title>Preenchimento de Rotas</title>
-
 </head>
 
 <body>
-
   <div class="container_divs">
     <div class="container">
       <div class="header">
@@ -42,45 +36,66 @@ BSB POA
 Separe origem e destino por espaço ou tab"></textarea>
       </div>
 
-      <div class="stats" >
+      <!-- Cards de status — IDs únicos, sem conflito com #relatorio -->
+      <div class="stats" id="json-preview">
         <div class="stat-card">
-          <div class="number" id="total-rotas">0</div>
-          <div class="label">Rotas</div>
+          <div class="number" id="preview-icone">⚠️</div>
+          <div class="label" id="preview-label">Rotas</div>
         </div>
         <div class="stat-card">
-          <div class="number" id="rotas-validas">0</div>
-          <div class="label">Válidas</div>
+          <div class="number" id="preview-total">0</div>
+          <div class="label" id="preview-label-validas">Válidas</div>
         </div>
+        <div class="stat-card" id="aviso-limite" style="display:none;">
+          <span class="number">⚠️</span>
+          <span class="label" id="aviso-texto"></span>
+        </div>
+
+        
       </div>
 
       <button id="btnExecutar">
-
-        <span id="btn-text">Executar Automação</span>
-
+        <span>Executar Automação</span>
       </button>
-      <button id="btnParar"><span id="btn-text">Parar Automação</span></button>
+      <button id="btnParar">
+        <span>Parar Automação</span>
+      </button>
     </div>
 
 
-    <div class="instrucoes">
-      <strong>Como usar:</strong>
-      <ul>
-        <li>Cole os pares origem/destino (um por linha)</li>
-        <li>Separe por espaço (ex: GRU CGH)</li>
-        <li>Clique em "Executar Automação"</li>
-        <li>Aguarde o processamento automático e o relatório de conclusão.</li>
-      </ul>
-      <br>
-      <strong>  Formato dos dados:</strong>
-      <p>Pode ser inserido dados da seguinte forma:</p>
-      <ul>
-        <li>Origem/Destino - ex: GRU CGH</li>
-        <li>Origem/Destino - ex: Buenos Aires (AEP)   Belo Horizonte (CNF)</li>
-      </ul>
+    <!-- Relatório final — id único -->
+    <div id="relatorio" style="display:none;">
 
+      <div class="header_relatorio">
+        
+        <h1>
+          <span>✈️</span>
+          Relatorio Final
+          <span>✈️</span>
+        </h1>
+     
+      
+
+      <h3 id="relatorio-titulo"></h3>
+
+      <div id="relatorio-interrupcao" style="display:none;">
+        <p>⚠️ Processo interrompido pelo usuário</p>
+      </div>
+
+      <div id="relatorio-processadas">
+        <p id="relatorio-processadas-texto"></p>
+      </div>
+
+      <div id="relatorio-nao-encontradas" style="display:none;">
+        <p id="relatorio-nao-encontradas-titulo"></p>
+        <div id="relatorio-nao-encontradas-lista"></div>
+      </div>
+      </div>
     </div>
+
+    <div id="previewRelatorio"></div>
+    
   </div>
-
 
   <script src="popup.js"></script>
 </body>

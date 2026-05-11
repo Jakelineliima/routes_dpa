@@ -157,46 +157,7 @@
       box-shadow: none;
     }
 
-    .instrucoes {
-      width: 350px;
-      height: 340px;
-      padding: 12px;
-      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-      border-left: 4px solid #0050F2;
-      border-radius: 6px;
-      font-size: 14px;
-      color: #555;
-    }
 
-    .instrucoes p {
-      margin-bottom: 10px;
-    }
-
-    .instrucoes strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #0050F2;
-      font-size: 16px;
-    }
-
-    .instrucoes ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .instrucoes li {
-      padding: 4px 0;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .instrucoes li:before {
-      content: "▸";
-      position: absolute;
-      left: 0;
-      color: #0050F2;
-      font-weight: bold;
-    }
 
     #json-preview {
       margin-top: 12px;
@@ -286,6 +247,74 @@
       display: none;
     }
 
+    /* Relatorio */
+   
+    .header_relatorio {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .header_relatorio h1 {
+      font-size: 22px;
+      color: #0050F2;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header_relatorio p {
+      font-size: 14px;
+      color: #888;
+    }
+
+
+      #relatorio {
+      width: 350px;
+      height: 340px;
+      padding: 12px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 4px solid #0050F2;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #555;
+  
+    }
+
+    #relatorio p {
+      margin-bottom: 10px;
+    }
+
+    #relatorio strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #0050F2;
+      font-size: 16px;
+    }
+
+    #relatorio ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #relatorio li {
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    #relatorio li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #0050F2;
+      font-weight: bold;
+    }
+
+
     /* Animação de loading */
     @keyframes spin {
       0% {
@@ -300,9 +329,3 @@
     .loading {
       animation: spin 1s linear infinite;
     }
-
-
-
-
-
-    

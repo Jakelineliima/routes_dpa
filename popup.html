@@ -51,7 +51,7 @@ Separe origem e destino por espaço ou tab"></textarea>
           <span class="label" id="aviso-texto"></span>
         </div>
 
-        
+
       </div>
 
       <button id="btnExecutar">
@@ -67,34 +67,41 @@ Separe origem e destino por espaço ou tab"></textarea>
     <div id="relatorio" style="display:none;">
 
       <div class="header_relatorio">
-        
+
         <h1>
           <span>✈️</span>
           Relatorio Final
           <span>✈️</span>
         </h1>
-     
-      
 
-      <h3 id="relatorio-titulo"></h3>
+        <h3 id="relatorio-titulo"></h3>
 
-      <div id="relatorio-interrupcao" style="display:none;">
-        <p>⚠️ Processo interrompido pelo usuário</p>
-      </div>
+        <div id="relatorio-interrupcao" style="display:none;">
+          <p>⚠️ Processo interrompido pelo usuário</p>
+        </div>
 
-      <div id="relatorio-processadas">
-        <p id="relatorio-processadas-texto"></p>
-      </div>
+        <div id="relatorio-processadas">
+          <p id="relatorio-processadas-texto"></p>
+        </div>
 
-      <div id="relatorio-nao-encontradas" style="display:none;">
-        <p id="relatorio-nao-encontradas-titulo"></p>
-        <div id="relatorio-nao-encontradas-lista"></div>
-      </div>
+        <div id="relatorio-nao-encontradas" style="display:none;">
+          <p id="relatorio-nao-encontradas-titulo"></p>
+          <div id="relatorio-nao-encontradas-lista"></div>
+        </div>
+        <hr class="separador">
+        <!-- Seção JSON -->
+        <div id="json-section" style="display: none;" >
+          <div >
+            <label style="font-size:13px;">🗂️ JSON gerado</label>
+            <button id="btnCopiarJSON">Copiar</button>
+          </div>
+          <textarea id="json-output" readonly rows="6"></textarea>
+        </div>
       </div>
     </div>
 
     <div id="previewRelatorio"></div>
-    
+
   </div>
 
   <script src="popup.js"></script>

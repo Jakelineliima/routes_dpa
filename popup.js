@@ -17,9 +17,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Atualiza os cards de status (preview)
 // ─────────────────────────────────────────────
 function atualizarStatusRotas(dados) {
-  const iconeEl  = document.getElementById('preview-icone');
-  const labelEl  = document.getElementById('preview-label');
-  const totalEl  = document.getElementById('preview-total');
+  const iconeEl = document.getElementById('preview-icone');
+  const labelEl = document.getElementById('preview-label');
+  const totalEl = document.getElementById('preview-total');
 
   if (iconeEl) iconeEl.textContent = dados.totalRotas > 0 ? '✅' : '⚠️';
 
@@ -35,8 +35,7 @@ function atualizarStatusRotas(dados) {
 }
 
 // ─────────────────────────────────────────────
-// Mostra o relatório final — ESCOPO GLOBAL
-// (precisa estar aqui para o onMessage conseguir chamar)
+// Mostra o relatório final
 // ─────────────────────────────────────────────
 function mostrarRelatorio(dados) {
   const relatorioEl            = document.getElementById('relatorio');
@@ -47,18 +46,12 @@ function mostrarRelatorio(dados) {
   const naoEncontradasTituloEl = document.getElementById('relatorio-nao-encontradas-titulo');
   const naoEncontradasListaEl  = document.getElementById('relatorio-nao-encontradas-lista');
 
-  // Título
-  tituloEl.textContent = dados.foiInterrompido
-    ? ''
-    : '';
+  tituloEl.textContent = dados.foiInterrompido ? '' : '';
 
-  // Aviso de interrupção
   interrupcaoEl.style.display = dados.foiInterrompido ? 'block' : 'none';
 
-  // Processadas com sucesso
   processadasTextoEl.textContent = `✅ Processadas com sucesso: ${dados.processadas.length}`;
 
-  // Não encontradas
   if (dados.naoEncontradas.length > 0) {
     naoEncontradasTituloEl.textContent = `⚠️ Rotas não encontradas: ${dados.naoEncontradas.length}`;
     naoEncontradasListaEl.replaceChildren();
@@ -98,36 +91,38 @@ function mostrarRelatorio(dados) {
 }
 
 // ─────────────────────────────────────────────
-// Reseta o relatório (chamado ao iniciar nova execução)
+// Reseta o relatório
 // ─────────────────────────────────────────────
 function resetarRelatorio() {
-  document.getElementById('relatorio').style.display               = 'none';
-  document.getElementById('relatorio-titulo').textContent          = '';
-  document.getElementById('relatorio-interrupcao').style.display   = 'none';
+  document.getElementById('relatorio').style.display                = 'none';
+  document.getElementById('relatorio-titulo').textContent           = '';
+  document.getElementById('relatorio-interrupcao').style.display    = 'none';
   document.getElementById('relatorio-processadas-texto').textContent = '';
   document.getElementById('relatorio-nao-encontradas').style.display = 'none';
   document.getElementById('relatorio-nao-encontradas-lista').replaceChildren();
 }
 
 // ─────────────────────────────────────────────
-// Exibe preview dos cards e aviso de limite
+// Exibe preview dos cards, aviso de limite e JSON
 // ─────────────────────────────────────────────
 function exibirPreviewJSON(rotas, duplicadas, totalOriginal) {
-  const iconeEl    = document.getElementById('preview-icone');
-  const labelRotas = document.getElementById('preview-label');
-  const totalEl    = document.getElementById('preview-total');
-  const avisoEl    = document.getElementById('aviso-limite');
-  const avisoTexto = document.getElementById('aviso-texto');
+  const iconeEl     = document.getElementById('preview-icone');
+  const labelRotas  = document.getElementById('preview-label');
+  const totalEl     = document.getElementById('preview-total');
+  const avisoEl     = document.getElementById('aviso-limite');
+  const avisoTexto  = document.getElementById('aviso-texto');
+  const jsonSection = document.getElementById('json-section');
+  const jsonOutput  = document.getElementById('json-output');
 
   if (rotas.length === 0) {
-    iconeEl.textContent    = '⚠️';
-    labelRotas.textContent = 'Nenhuma rota válida';
-    totalEl.textContent    = '0';
-    avisoEl.style.display  = 'none';
+    iconeEl.textContent       = '⚠️';
+    labelRotas.textContent    = 'Nenhuma rota válida';
+    totalEl.textContent       = '0';
+    avisoEl.style.display     = 'none';
+    jsonSection.style.display = 'none';
     return;
   }
 
-  // Card 1 — ícone e label
   if (duplicadas.length > 0) {
     iconeEl.textContent    = '⚠️';
     labelRotas.textContent = `${rotas.length} única${rotas.length > 1 ? 's' : ''} de ${totalOriginal} (${duplicadas.length} removida${duplicadas.length > 1 ? 's' : ''})`;
@@ -136,10 +131,8 @@ function exibirPreviewJSON(rotas, duplicadas, totalOriginal) {
     labelRotas.textContent = `${rotas.length} rota${rotas.length > 1 ? 's' : ''} (sem duplicatas)`;
   }
 
-  // Card 2 — total válidas
   totalEl.textContent = rotas.length;
 
-  // Card 3 — aviso de limite
   if (rotas.length > 20) {
     const excesso          = rotas.length - 20;
     avisoTexto.textContent = `${excesso} rota${excesso > 1 ? 's' : ''} acima do limite de 20`;
@@ -148,7 +141,30 @@ function exibirPreviewJSON(rotas, duplicadas, totalOriginal) {
     avisoTexto.textContent = '';
     avisoEl.style.display  = 'none';
   }
+
+  // Monta e exibe o JSON
+  const json = JSON.stringify(
+    rotas.map(r => ({ origem: r.origem, destino: r.destino })),
+    null,
+    2
+  );
+  jsonOutput.value          = json;
+  jsonSection.style.display = 'block';
 }
+
+// ─────────────────────────────────────────────
+// Botão Copiar JSON
+// ─────────────────────────────────────────────
+document.getElementById('btnCopiarJSON').addEventListener('click', () => {
+  const jsonOutput = document.getElementById('json-output');
+  jsonOutput.select();
+  navigator.clipboard.writeText(jsonOutput.value).then(() => {
+    const btn      = document.getElementById('btnCopiarJSON');
+    const original = btn.textContent;
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  });
+});
 
 // ─────────────────────────────────────────────
 // Extrai código entre parênteses
@@ -169,19 +185,20 @@ function converterParaJSON() {
   const texto    = textarea.value.trim();
 
   if (!texto) {
-    document.getElementById('preview-icone').textContent    = '⚠️';
-    document.getElementById('preview-label').textContent    = 'Rotas';
-    document.getElementById('preview-total').textContent    = '0';
-    document.getElementById('aviso-limite').style.display   = 'none';
+    document.getElementById('preview-icone').textContent     = '⚠️';
+    document.getElementById('preview-label').textContent     = 'Rotas';
+    document.getElementById('preview-total').textContent     = '0';
+    document.getElementById('aviso-limite').style.display    = 'none';
+    document.getElementById('json-section').style.display    = 'none';
     return;
   }
 
   const linhas = texto.split('\n').filter(l => l.trim() !== '');
 
   const rotasComDuplicatas = linhas.map((linha, index) => {
-    const partes           = linha.trim().split(/\t+/);
+    const partes            = linha.trim().split(/\t+/);
     const partesProcessadas = partes.length > 1 ? partes : linha.trim().split(/\s{2,}/);
-    const partesFinais     = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
+    const partesFinais      = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
 
     const origemInfo  = extrairCodigo(partesFinais[0] || '');
     const destinoInfo = extrairCodigo(partesFinais[1] || '');
@@ -196,9 +213,9 @@ function converterParaJSON() {
     };
   }).filter(r => r.origem && r.destino);
 
-  const rotasUnicas    = [];
+  const rotasUnicas     = [];
   const rotasDuplicadas = [];
-  const rotasVistas    = new Set();
+  const rotasVistas     = new Set();
 
   rotasComDuplicatas.forEach(rota => {
     const chave = `${rota.origem.toUpperCase()}-${rota.destino.toUpperCase()}`;
@@ -247,10 +264,10 @@ document.getElementById('dados').addEventListener('input', () => {
 // Botão Executar
 // ─────────────────────────────────────────────
 document.getElementById('btnExecutar').addEventListener('click', async () => {
-  const textarea   = document.getElementById('dados');
-  const texto      = textarea.value.trim();
+  const textarea    = document.getElementById('dados');
+  const texto       = textarea.value.trim();
   const btnExecutar = document.getElementById('btnExecutar');
-  const btnParar   = document.getElementById('btnParar');
+  const btnParar    = document.getElementById('btnParar');
 
   if (!texto) {
     alert('⚠️ Por favor, cole os dados antes de executar!');
@@ -263,7 +280,6 @@ document.getElementById('btnExecutar').addEventListener('click', async () => {
     return;
   }
 
-  // Limpa relatório anterior antes de começar
   resetarRelatorio();
 
   btnExecutar.disabled    = true;
@@ -305,7 +321,7 @@ document.getElementById('btnExecutar').addEventListener('click', async () => {
 // Botão Parar
 // ─────────────────────────────────────────────
 document.getElementById('btnParar').addEventListener('click', async () => {
-  const btnParar   = document.getElementById('btnParar');
+  const btnParar    = document.getElementById('btnParar');
   const btnExecutar = document.getElementById('btnExecutar');
 
   if (!processandoAtual) return;
@@ -338,7 +354,6 @@ document.getElementById('btnParar').addEventListener('click', async () => {
 // ─────────────────────────────────────────────
 // Função principal injetada na página
 // ─────────────────────────────────────────────
-
 function automarFormulario(linhas) {
   const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
@@ -356,8 +371,8 @@ function automarFormulario(linhas) {
 
   function displayFeedback(message, isError = false) {
     const el = document.createElement('div');
-    el.textContent          = message;
-    el.style.cssText        = `
+    el.textContent   = message;
+    el.style.cssText = `
       position:fixed; top:20px; left:50%; transform:translateX(-50%);
       padding:10px 20px; background:${isError ? '#f44336' : '#4CAF50'};
       color:white; border-radius:5px; z-index:10000;
@@ -367,7 +382,6 @@ function automarFormulario(linhas) {
     setTimeout(() => { if (document.body.contains(el)) document.body.removeChild(el); }, 4000);
   }
 
-  // Envia relatório para o popup via message
   function enviarRelatorioParaPopup(processadas, naoEncontradas, foiInterrompido = false) {
     chrome.runtime.sendMessage({
       action: 'mostrarRelatorio',
@@ -412,11 +426,11 @@ function automarFormulario(linhas) {
   }
 
   function processarLinha(linha) {
-    const partes           = linha.trim().split(/\t+/);
+    const partes            = linha.trim().split(/\t+/);
     const partesProcessadas = partes.length > 1 ? partes : linha.trim().split(/\s{2,}/);
-    const partesFinais     = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
-    const origemInfo       = extrairCodigo(partesFinais[0] || '');
-    const destinoInfo      = extrairCodigo(partesFinais[1] || '');
+    const partesFinais      = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
+    const origemInfo        = extrairCodigo(partesFinais[0] || '');
+    const destinoInfo       = extrairCodigo(partesFinais[1] || '');
     return {
       origem: origemInfo.codigo,
       destino: destinoInfo.codigo,
@@ -428,8 +442,8 @@ function automarFormulario(linhas) {
   }
 
   function removerDuplicatas(linhas) {
-    const rotasUnicas    = [];
-    const rotasVistas    = new Set();
+    const rotasUnicas       = [];
+    const rotasVistas       = new Set();
     let duplicatasRemovidas = 0;
 
     linhas.forEach(linha => {

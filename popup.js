@@ -58,15 +58,14 @@ function mostrarRelatorio(dados) {
 
     dados.naoEncontradas.forEach(r => {
       const item   = document.createElement('div');
-      const icone  = document.createElement('span');
       const rota   = document.createElement('strong');
       const campo  = document.createElement('span');
 
-      icone.textContent = r.tipo === 'origem' ? '🔴 ' : '🔵 ';
-      rota.textContent  = `${r.origem} → ${r.destino}`;
-      campo.textContent = `Campo não encontrado: ${r.campo} (buscou: ${r.valor})`;
 
-      item.appendChild(icone);
+      rota.textContent  = `${r.origem} → ${r.destino}`;
+      // campo.textContent = `Campo não encontrado: ${r.campo} (buscou: ${r.valor})`;
+
+      // item.appendChild(icone);
       item.appendChild(rota);
       item.appendChild(document.createElement('br'));
       item.appendChild(campo);
@@ -373,7 +372,7 @@ function automarFormulario(linhas) {
     const el = document.createElement('div');
     el.textContent   = message;
     el.style.cssText = `
-      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      position:fixed; top:20px; left:35%; transform:translateX(-50%);
       padding:10px 20px; background:${isError ? '#f44336' : '#4CAF50'};
       color:white; border-radius:5px; z-index:10000;
       box-shadow:0 2px 5px rgba(0,0,0,0.2);

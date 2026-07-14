@@ -58,15 +58,14 @@ function mostrarRelatorio(dados) {
 
     dados.naoEncontradas.forEach(r => {
       const item   = document.createElement('div');
-      const icone  = document.createElement('span');
       const rota   = document.createElement('strong');
       const campo  = document.createElement('span');
 
-      icone.textContent = r.tipo === 'origem' ? '🔴 ' : '🔵 ';
-      rota.textContent  = `${r.origem} → ${r.destino}`;
-      campo.textContent = `Campo não encontrado: ${r.campo} (buscou: ${r.valor})`;
 
-      item.appendChild(icone);
+      rota.textContent  = `${r.origem} → ${r.destino}`;
+      // campo.textContent = `Campo não encontrado: ${r.campo} (buscou: ${r.valor})`;
+
+      // item.appendChild(icone);
       item.appendChild(rota);
       item.appendChild(document.createElement('br'));
       item.appendChild(campo);
@@ -373,7 +372,7 @@ function automarFormulario(linhas) {
     const el = document.createElement('div');
     el.textContent   = message;
     el.style.cssText = `
-      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      position:fixed; top:20px; left:35%; transform:translateX(-50%);
       padding:10px 20px; background:${isError ? '#f44336' : '#4CAF50'};
       color:white; border-radius:5px; z-index:10000;
       box-shadow:0 2px 5px rgba(0,0,0,0.2);
@@ -490,6 +489,13 @@ function automarFormulario(linhas) {
     return null;
   }
 
+  // ─────────────────────────────────────────────
+  // Digita o valor no campo e seleciona a opção.
+  // Se o código tiver exatamente 3 letras (padrão IATA, ex: "GRU"),
+  // adiciona " -" no final da digitação, pois o sistema só encontra assim.
+  // Se tiver mais que 3 letras (país/cidade, ex: "Brasil"), digita
+  // apenas o nome, sem hífen, pois com hífen o sistema não encontra.
+  // ─────────────────────────────────────────────
   async function digitarESelecionar(spanLabel, codigo, textoCompleto, origem, destino) {
     const input = await esperarCampo(spanLabel);
     if (!input) return { success: false, motivo: `Input ${spanLabel} não encontrado` };
@@ -498,14 +504,17 @@ function automarFormulario(linhas) {
     input.value = '';
     input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'deleteContentBackward' }));
 
-    for (const letra of (codigo + ' -')) {
+    const ehAeroporto = codigo.trim().length === 3;
+    const sufixo       = ehAeroporto ? ' -' : '';
+
+    for (const letra of (codigo + sufixo)) {
       input.value += letra;
       input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: letra }));
       await delay(100);
       if (window.automacaoController.deveParar) return { success: false, motivo: 'Interrompido pelo usuário' };
     }
 
-    await delay(1200);
+    await delay(ehAeroporto ? 1200 : 1500);
 
     const opcoes = Array.from(document.querySelectorAll('li.p-select-option[role="option"]'));
     let alvo = opcoes.find(el => normalizarTexto(el.getAttribute('aria-label')).includes(normalizarTexto(codigo)));
@@ -551,7 +560,13 @@ function automarFormulario(linhas) {
       limparOrigem();
       await delay(300);
 
-      const resultadoOrigem = await digitarESelecionar('Origin', rota.origem, rota.origemCompleta, rota.origem, rota.destino);
+      const resultadoOrigem = await digitarESelecionar(
+        'Origin',
+        rota.origem,
+        rota.origemCompleta,
+        rota.origem,
+        rota.destino
+      );
       if (!resultadoOrigem.success) {
         if (window.automacaoController.deveParar) { enviarRelatorioParaPopup(rotasProcessadas, rotasNaoEncontradas, true); return; }
         rotasFalhas.push({ origem: rota.origem, destino: rota.destino, motivo: resultadoOrigem.motivo });
@@ -561,7 +576,13 @@ function automarFormulario(linhas) {
 
       await delay(1000);
 
-      const resultadoDestino = await digitarESelecionar('Destination', rota.destino, rota.destinoCompleta, rota.origem, rota.destino);
+      const resultadoDestino = await digitarESelecionar(
+        'Destination',
+        rota.destino,
+        rota.destinoCompleta,
+        rota.origem,
+        rota.destino
+      );
       if (!resultadoDestino.success) {
         if (window.automacaoController.deveParar) { enviarRelatorioParaPopup(rotasProcessadas, rotasNaoEncontradas, true); return; }
         rotasFalhas.push({ origem: rota.origem, destino: rota.destino, motivo: resultadoDestino.motivo });

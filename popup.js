@@ -10,8 +10,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   if (request.action === 'mostrarRelatorio') {
     mostrarRelatorio(request.dados);
+    finalizarExecucao();
   }
 });
+
+// ─────────────────────────────────────────────
+// Reseta os botões ao estado "parado"
+// ─────────────────────────────────────────────
+function finalizarExecucao() {
+  const btnExecutar = document.getElementById('btnExecutar');
+  const btnParar = document.getElementById('btnParar');
+
+  btnExecutar.disabled = false;
+  btnExecutar.textContent = '▶️ Executar Automação';
+  btnExecutar.style.background = '#4CAF50';
+
+  btnParar.disabled = true;
+  btnParar.textContent = '⏸️ Parar Automação';
+
+  processandoAtual = null;
+}
 
 // ─────────────────────────────────────────────
 // Atualiza os cards de status (preview)
@@ -38,13 +56,13 @@ function atualizarStatusRotas(dados) {
 // Mostra o relatório final
 // ─────────────────────────────────────────────
 function mostrarRelatorio(dados) {
-  const relatorioEl            = document.getElementById('relatorio');
-  const tituloEl               = document.getElementById('relatorio-titulo');
-  const interrupcaoEl          = document.getElementById('relatorio-interrupcao');
-  const processadasTextoEl     = document.getElementById('relatorio-processadas-texto');
-  const naoEncontradasEl       = document.getElementById('relatorio-nao-encontradas');
+  const relatorioEl = document.getElementById('relatorio');
+  const tituloEl = document.getElementById('relatorio-titulo');
+  const interrupcaoEl = document.getElementById('relatorio-interrupcao');
+  const processadasTextoEl = document.getElementById('relatorio-processadas-texto');
+  const naoEncontradasEl = document.getElementById('relatorio-nao-encontradas');
   const naoEncontradasTituloEl = document.getElementById('relatorio-nao-encontradas-titulo');
-  const naoEncontradasListaEl  = document.getElementById('relatorio-nao-encontradas-lista');
+  const naoEncontradasListaEl = document.getElementById('relatorio-nao-encontradas-lista');
 
   tituloEl.textContent = dados.foiInterrompido ? '' : '';
 
@@ -57,12 +75,12 @@ function mostrarRelatorio(dados) {
     naoEncontradasListaEl.replaceChildren();
 
     dados.naoEncontradas.forEach(r => {
-      const item   = document.createElement('div');
-      const rota   = document.createElement('strong');
-      const campo  = document.createElement('span');
+      const item = document.createElement('div');
+      const rota = document.createElement('strong');
+      const campo = document.createElement('span');
 
 
-      rota.textContent  = `${r.origem} → ${r.destino}`;
+      rota.textContent = `${r.origem} → ${r.destino}`;
       // campo.textContent = `Campo não encontrado: ${r.campo} (buscou: ${r.valor})`;
 
       // item.appendChild(icone);
@@ -93,9 +111,9 @@ function mostrarRelatorio(dados) {
 // Reseta o relatório
 // ─────────────────────────────────────────────
 function resetarRelatorio() {
-  document.getElementById('relatorio').style.display                = 'none';
-  document.getElementById('relatorio-titulo').textContent           = '';
-  document.getElementById('relatorio-interrupcao').style.display    = 'none';
+  document.getElementById('relatorio').style.display = 'none';
+  document.getElementById('relatorio-titulo').textContent = '';
+  document.getElementById('relatorio-interrupcao').style.display = 'none';
   document.getElementById('relatorio-processadas-texto').textContent = '';
   document.getElementById('relatorio-nao-encontradas').style.display = 'none';
   document.getElementById('relatorio-nao-encontradas-lista').replaceChildren();
@@ -105,40 +123,40 @@ function resetarRelatorio() {
 // Exibe preview dos cards, aviso de limite e JSON
 // ─────────────────────────────────────────────
 function exibirPreviewJSON(rotas, duplicadas, totalOriginal) {
-  const iconeEl     = document.getElementById('preview-icone');
-  const labelRotas  = document.getElementById('preview-label');
-  const totalEl     = document.getElementById('preview-total');
-  const avisoEl     = document.getElementById('aviso-limite');
-  const avisoTexto  = document.getElementById('aviso-texto');
+  const iconeEl = document.getElementById('preview-icone');
+  const labelRotas = document.getElementById('preview-label');
+  const totalEl = document.getElementById('preview-total');
+  const avisoEl = document.getElementById('aviso-limite');
+  const avisoTexto = document.getElementById('aviso-texto');
   const jsonSection = document.getElementById('json-section');
-  const jsonOutput  = document.getElementById('json-output');
+  const jsonOutput = document.getElementById('json-output');
 
   if (rotas.length === 0) {
-    iconeEl.textContent       = '⚠️';
-    labelRotas.textContent    = 'Nenhuma rota válida';
-    totalEl.textContent       = '0';
-    avisoEl.style.display     = 'none';
+    iconeEl.textContent = '⚠️';
+    labelRotas.textContent = 'Nenhuma rota válida';
+    totalEl.textContent = '0';
+    avisoEl.style.display = 'none';
     jsonSection.style.display = 'none';
     return;
   }
 
   if (duplicadas.length > 0) {
-    iconeEl.textContent    = '⚠️';
+    iconeEl.textContent = '⚠️';
     labelRotas.textContent = `${rotas.length} única${rotas.length > 1 ? 's' : ''} de ${totalOriginal} (${duplicadas.length} removida${duplicadas.length > 1 ? 's' : ''})`;
   } else {
-    iconeEl.textContent    = '✅';
+    iconeEl.textContent = '✅';
     labelRotas.textContent = `${rotas.length} rota${rotas.length > 1 ? 's' : ''} (sem duplicatas)`;
   }
 
   totalEl.textContent = rotas.length;
 
   if (rotas.length > 20) {
-    const excesso          = rotas.length - 20;
+    const excesso = rotas.length - 20;
     avisoTexto.textContent = `${excesso} rota${excesso > 1 ? 's' : ''} acima do limite de 20`;
-    avisoEl.style.display  = 'block';
+    avisoEl.style.display = 'block';
   } else {
     avisoTexto.textContent = '';
-    avisoEl.style.display  = 'none';
+    avisoEl.style.display = 'none';
   }
 
   // Monta e exibe o JSON
@@ -147,7 +165,7 @@ function exibirPreviewJSON(rotas, duplicadas, totalOriginal) {
     null,
     2
   );
-  jsonOutput.value          = json;
+  jsonOutput.value = json;
   jsonSection.style.display = 'block';
 }
 
@@ -158,7 +176,7 @@ document.getElementById('btnCopiarJSON').addEventListener('click', () => {
   const jsonOutput = document.getElementById('json-output');
   jsonOutput.select();
   navigator.clipboard.writeText(jsonOutput.value).then(() => {
-    const btn      = document.getElementById('btnCopiarJSON');
+    const btn = document.getElementById('btnCopiarJSON');
     const original = btn.textContent;
     btn.textContent = '✅ Copiado!';
     setTimeout(() => { btn.textContent = original; }, 2000);
@@ -181,25 +199,25 @@ function extrairCodigo(texto) {
 // ─────────────────────────────────────────────
 function converterParaJSON() {
   const textarea = document.getElementById('dados');
-  const texto    = textarea.value.trim();
+  const texto = textarea.value.trim();
 
   if (!texto) {
-    document.getElementById('preview-icone').textContent     = '⚠️';
-    document.getElementById('preview-label').textContent     = 'Rotas';
-    document.getElementById('preview-total').textContent     = '0';
-    document.getElementById('aviso-limite').style.display    = 'none';
-    document.getElementById('json-section').style.display    = 'none';
+    document.getElementById('preview-icone').textContent = '⚠️';
+    document.getElementById('preview-label').textContent = 'Rotas';
+    document.getElementById('preview-total').textContent = '0';
+    document.getElementById('aviso-limite').style.display = 'none';
+    document.getElementById('json-section').style.display = 'none';
     return;
   }
 
   const linhas = texto.split('\n').filter(l => l.trim() !== '');
 
   const rotasComDuplicatas = linhas.map((linha, index) => {
-    const partes            = linha.trim().split(/\t+/);
+    const partes = linha.trim().split(/\t+/);
     const partesProcessadas = partes.length > 1 ? partes : linha.trim().split(/\s{2,}/);
-    const partesFinais      = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
+    const partesFinais = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
 
-    const origemInfo  = extrairCodigo(partesFinais[0] || '');
+    const origemInfo = extrairCodigo(partesFinais[0] || '');
     const destinoInfo = extrairCodigo(partesFinais[1] || '');
 
     return {
@@ -212,9 +230,9 @@ function converterParaJSON() {
     };
   }).filter(r => r.origem && r.destino);
 
-  const rotasUnicas     = [];
+  const rotasUnicas = [];
   const rotasDuplicadas = [];
-  const rotasVistas     = new Set();
+  const rotasVistas = new Set();
 
   rotasComDuplicatas.forEach(rota => {
     const chave = `${rota.origem.toUpperCase()}-${rota.destino.toUpperCase()}`;
@@ -263,10 +281,10 @@ document.getElementById('dados').addEventListener('input', () => {
 // Botão Executar
 // ─────────────────────────────────────────────
 document.getElementById('btnExecutar').addEventListener('click', async () => {
-  const textarea    = document.getElementById('dados');
-  const texto       = textarea.value.trim();
+  const textarea = document.getElementById('dados');
+  const texto = textarea.value.trim();
   const btnExecutar = document.getElementById('btnExecutar');
-  const btnParar    = document.getElementById('btnParar');
+  const btnParar = document.getElementById('btnParar');
 
   if (!texto) {
     alert('⚠️ Por favor, cole os dados antes de executar!');
@@ -281,10 +299,9 @@ document.getElementById('btnExecutar').addEventListener('click', async () => {
 
   resetarRelatorio();
 
-  btnExecutar.disabled    = true;
+  btnExecutar.disabled = true;
   btnExecutar.textContent = '⏳ Executando...';
-  btnParar.disabled       = false;
-  btnParar.style.display  = 'inline-block';
+  btnParar.disabled = false;
 
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -296,23 +313,14 @@ document.getElementById('btnExecutar').addEventListener('click', async () => {
       args: [linhas]
     });
 
-    btnExecutar.textContent      = '✅ Executado com sucesso!';
-    btnExecutar.style.background = '#2196F3';
-
-    setTimeout(() => {
-      btnExecutar.textContent      = '▶️ Executar Automação';
-      btnExecutar.style.background = '#4CAF50';
-    }, 2000);
+    // A automação real roda de forma assíncrona dentro da página.
+    // Os botões só voltam ao estado normal quando o relatório chegar
+    // (mensagem 'mostrarRelatorio' -> finalizarExecucao()).
 
   } catch (error) {
     console.error('Erro ao executar:', error);
     alert('❌ Erro ao executar a automação. Verifique se você está na página correta.');
-
-    btnExecutar.disabled         = false;
-    btnExecutar.textContent      = '▶️ Executar Automação';
-    btnParar.disabled            = true;
-    btnParar.style.display       = 'none';
-    processandoAtual             = null;
+    finalizarExecucao();
   }
 });
 
@@ -320,13 +328,12 @@ document.getElementById('btnExecutar').addEventListener('click', async () => {
 // Botão Parar
 // ─────────────────────────────────────────────
 document.getElementById('btnParar').addEventListener('click', async () => {
-  const btnParar    = document.getElementById('btnParar');
-  const btnExecutar = document.getElementById('btnExecutar');
+  const btnParar = document.getElementById('btnParar');
 
   if (!processandoAtual) return;
 
   btnParar.textContent = '🛑 Parando...';
-  btnParar.disabled    = true;
+  btnParar.disabled = true;
 
   try {
     await chrome.scripting.executeScript({
@@ -341,13 +348,17 @@ document.getElementById('btnParar').addEventListener('click', async () => {
     console.error('Erro ao parar:', error);
   }
 
-  setTimeout(() => {
-    btnParar.style.display       = 'none';
-    btnParar.textContent         = '⏸️ Parar Automação';
-    btnExecutar.disabled         = false;
-    btnExecutar.style.background = '#4CAF50';
-    processandoAtual             = null;
-  }, 1000);
+  // O reset final (botões e textContent) acontece em finalizarExecucao(),
+  // disparado quando o relatório de interrupção chegar.
+});
+
+// ─────────────────────────────────────────────
+// Estado inicial: garante que o botão Parar
+// nasça desabilitado (mas visível)
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const btnParar = document.getElementById('btnParar');
+  if (btnParar) btnParar.disabled = true;
 });
 
 // ─────────────────────────────────────────────
@@ -365,12 +376,12 @@ function automarFormulario(linhas) {
   };
 
   const rotasNaoEncontradas = [];
-  const rotasProcessadas    = [];
-  const rotasFalhas         = [];
+  const rotasProcessadas = [];
+  const rotasFalhas = [];
 
   function displayFeedback(message, isError = false) {
     const el = document.createElement('div');
-    el.textContent   = message;
+    el.textContent = message;
     el.style.cssText = `
       position:fixed; top:20px; left:35%; transform:translateX(-50%);
       padding:10px 20px; background:${isError ? '#f44336' : '#4CAF50'};
@@ -415,7 +426,7 @@ function automarFormulario(linhas) {
     return false;
   }
 
-  const limparOrigem  = () => limparCampo('Origin');
+  const limparOrigem = () => limparCampo('Origin');
   const limparDestino = () => limparCampo('Destination');
 
   function extrairCodigo(texto) {
@@ -425,11 +436,11 @@ function automarFormulario(linhas) {
   }
 
   function processarLinha(linha) {
-    const partes            = linha.trim().split(/\t+/);
+    const partes = linha.trim().split(/\t+/);
     const partesProcessadas = partes.length > 1 ? partes : linha.trim().split(/\s{2,}/);
-    const partesFinais      = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
-    const origemInfo        = extrairCodigo(partesFinais[0] || '');
-    const destinoInfo       = extrairCodigo(partesFinais[1] || '');
+    const partesFinais = partesProcessadas.length > 1 ? partesProcessadas : linha.trim().split(/\s+/);
+    const origemInfo = extrairCodigo(partesFinais[0] || '');
+    const destinoInfo = extrairCodigo(partesFinais[1] || '');
     return {
       origem: origemInfo.codigo,
       destino: destinoInfo.codigo,
@@ -441,12 +452,12 @@ function automarFormulario(linhas) {
   }
 
   function removerDuplicatas(linhas) {
-    const rotasUnicas       = [];
-    const rotasVistas       = new Set();
+    const rotasUnicas = [];
+    const rotasVistas = new Set();
     let duplicatasRemovidas = 0;
 
     linhas.forEach(linha => {
-      const info  = processarLinha(linha);
+      const info = processarLinha(linha);
       if (!info.origem || !info.destino) return;
       const chave = `${info.origem.toUpperCase()}-${info.destino.toUpperCase()}`;
       if (!rotasVistas.has(chave)) {
